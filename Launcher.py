@@ -12,7 +12,9 @@ def encapsulate_args_in_quotes(f):
         return f
 
 class Launcher:
-    def __init__(self, name):
+    def __init__(self, name, **kwargs):
+        self.stderr_to_console = kwargs.get('stderr_to_console', False)
+        self.stdout_to_console = kwargs.get('stdout_to_console', False)
         self.args = [name]
 
     def addArg(self, key, *value, **kwargs):
@@ -31,4 +33,15 @@ class Launcher:
                 self.args.append(win32api.GetShortPathName(f))
             
     def __call__(self):
-        subprocess.Popen(self.args)
+        #print self.args
+        if not self.stderr_to_console:
+            stderr = subprocess.PIPE
+        else:
+            stderr = None
+
+        if not self.stdout_to_console:
+            stdout = subprocess.PIPE
+        else:
+            stdout = None
+
+        subprocess.Popen(self.args, stdout = stdout, stderr = stderr)

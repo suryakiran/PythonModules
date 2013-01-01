@@ -32,8 +32,11 @@ class Launcher:
             else:
                 self.args.append(win32api.GetShortPathName(f))
             
-    def __call__(self):
-        #print self.args
+    def __call__(self, **kwargs):
+        print_args = kwargs.get('print_args')
+        wait = kwargs.get('wait_for_command_to_complete')
+        if print_args:
+            print self.args
         if not self.stderr_to_console:
             stderr = subprocess.PIPE
         else:
@@ -44,4 +47,8 @@ class Launcher:
         else:
             stdout = None
 
-        subprocess.Popen(self.args, stdout = stdout, stderr = stderr)
+        if wait:
+            subprocess.call(self.args)
+        else:
+            subprocess.Popen(self.args, stdout = stdout, stderr = stderr)
+

@@ -34,6 +34,9 @@ class Launcher:
             
     def __call__(self, **kwargs):
         print_args = kwargs.get('print_args')
+        dry_run = kwargs.get('dry_run')
+        if dry_run:
+            print_args = True
         wait = kwargs.get('wait_for_command_to_complete')
         if print_args:
             print self.args
@@ -47,6 +50,9 @@ class Launcher:
         else:
             stdout = None
 
+        if dry_run:
+            return
+        
         if wait:
             subprocess.call(self.args)
         else:

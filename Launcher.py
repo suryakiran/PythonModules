@@ -52,6 +52,9 @@ class Launcher:
 
         if dry_run:
             return
+
+        if not os.access(self.args[0], os.X_OK):
+            return
         
         if wait:
             subprocess.call(self.args)

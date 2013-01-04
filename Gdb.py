@@ -6,6 +6,7 @@ class Gdb:
     def __init__(self, **kwargs):
         self.debug = kwargs.get('debug', True)
         self.exe_file = kwargs.get('exe_file')
+        self.dry_run = kwargs.get('dry_run')
 
         if self.debug:
             self.debugger = Locator('cgdb')()
@@ -39,7 +40,7 @@ class Gdb:
             
         if kwargs is not None:
             for key in kwargs:
-                launcher.addArg('--%s' % key, '"%s"' % kwargs[key], append=True)
+                launcher.addArg('--%s' % key, '%s' % kwargs[key], append=True)
 
-        launcher(wait_for_command_to_complete = True)
+        launcher(dry_run = self.dry_run, wait_for_command_to_complete = True)
         

@@ -64,7 +64,8 @@ class Emacs:
         files = commands.getoutput("ls -l %s | grep '^-' | awk '{print $NF}'" % servers_dir).split('\n')
         return files
         
-    def launch(self):
+    def launch(self, **kwargs):
+        dry_run = kwargs.get('dry_run')
         if self.files:
             self._launcher.addFiles(self.files)
         else:
@@ -73,4 +74,4 @@ class Emacs:
         if self.emacsExpr:
             self._launcher.addArg('--eval', self.emacsExpr())
 
-        self._launcher()
+        self._launcher(dry_run = dry_run)

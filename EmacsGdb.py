@@ -12,12 +12,16 @@ class EmacsGdb (Emacs):
         self.gdbCl = Launcher(self.gdb)
         self.gdbCl.addArg('-i', 'mi', append = True)
         self.gdbCl.addArg(self.exeToDebug)
+        self.firstArg = True
+
+    def addArg(self, key, *value, **kwargs):
+        self.gdbCl.addArg (key, *value, **kwargs)
+        
+    def launch(self, **kwargs):
         self._emacsExpr().addStatement('gdb "%s"' % (self.gdbCl))
         self._emacsExpr().addStatement('gdb-many-windows t')
-        self.launch(dry_run = False)
+        super(EmacsGdb, self).launch(**kwargs)
 
-    
-if __name__ == '__main__':
-    e = EmacsGdb('TestGdb',
-                 exe_to_debug = '/home/surya/Projects/BuildArea/CodeSamples/StageArea/Debug/pythonify/bin/debug-variant'
-                 )
+    def __call__(self, **kwargs):
+        dry_run = kwargs.get('dry_run')
+        self.launch(dry_run = dry_run)

@@ -12,8 +12,9 @@ class EmacsGdb (Emacs):
         self.gdbCl = Launcher(self.gdb)
         self.gdbCl.addArg('-i', 'mi', append = True)
         self.gdbCl.addArg(self.exeToDebug)
-        print str(self.gdbCl)
+        self._emacsExpr().addStatement('gdb "%s"' % (self.gdbCl))
         self._emacsExpr().addStatement('gdb-many-windows t')
+        self.launch(dry_run = False)
 
     
 if __name__ == '__main__':

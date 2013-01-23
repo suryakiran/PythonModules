@@ -19,6 +19,7 @@ class EmacsExpression:
 class Emacs(object):
     def __init__(self, server_name, **kwargs):
         server_name = server_name.upper()
+        os.environ['CURRENT_PACKAGE_NAME'] = server_name
         self.open_init_file = kwargs.get('open_init_file', False)
 
         self.files = None

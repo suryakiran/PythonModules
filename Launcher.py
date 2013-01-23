@@ -31,7 +31,10 @@ class Launcher:
                 self.args.append(f)
             else:
                 self.args.append(win32api.GetShortPathName(f))
-            
+
+    def __str__ (self):
+        return ' '.join(self.args)
+    
     def __call__(self, **kwargs):
         print_args = kwargs.get('print_args')
         dry_run = kwargs.get('dry_run')

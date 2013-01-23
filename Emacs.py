@@ -16,7 +16,7 @@ class EmacsExpression:
         self.comstr.append(')')
         return ' '.join(self.comstr)
 
-class Emacs:
+class Emacs(object):
     def __init__(self, server_name, **kwargs):
         server_name = server_name.upper()
         self.open_init_file = kwargs.get('open_init_file', False)

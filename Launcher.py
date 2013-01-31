@@ -1,6 +1,7 @@
 import os, sys, re
 import subprocess
 import utils
+from types import *
 
 if not utils.is_posix:
     import win32api
@@ -17,6 +18,18 @@ class Launcher:
         self.stdout_to_console = kwargs.get('stdout_to_console', False)
         self.args = [name]
 
+    def __iadd__(self, key):
+        if type(key) is TupleType:
+            if len(key) == 2:
+                self.addArg(key[0], key[1], append = True)
+            elif len(key) == 1:
+                self.addArg(key[0])
+            else:
+                raise TypeError("Invalid argument to launcher")
+        else:
+            self.addArg(key)
+        return self
+        
     def addArg(self, key, *value, **kwargs):
         append = kwargs.get('append', None)
         if len(value) and append:

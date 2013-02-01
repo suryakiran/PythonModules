@@ -35,13 +35,12 @@ class Emacs(object):
         if line:
             self._gotoLine(line)
 
-        self.exePath = Locator('emacs')()
-        self.exeClientPath = Locator('emacsclient')()
+        self.exePath = Locator('emacs')
+        self.exeClientPath = Locator('emacsclient')
         self.homeEnv = os.environ['HOME']
         if self._serverRunning(server_name):
             self._launcher = Launcher(self.exeClientPath)
-            self._launcher.addArg('-n')
-            self._launcher.addArg('-f', server_name)
+            self._launcher += ['-n', '-f', server_name]
         else:
             self._launcher = Launcher(self.exePath)
 

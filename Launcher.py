@@ -1,6 +1,8 @@
 import os, sys, re
 import subprocess
 import utils
+from Locator import Locator
+from types import *
 
 if not utils.is_posix:
     import win32api
@@ -15,8 +17,28 @@ class Launcher:
     def __init__(self, name, **kwargs):
         self.stderr_to_console = kwargs.get('stderr_to_console', False)
         self.stdout_to_console = kwargs.get('stdout_to_console', False)
-        self.args = [name]
 
+        if type(name) is StringType:
+            l = Locator(name)
+            self.args = [l()]
+        elif isinstance(name, Locator):
+            self.args = [name()]
+        else:
+            raise TypeError("Invalid argument for Launcher")
+
+    def __iadd__(self, value):
+        if (type(value) is TupleType) or (type(value) is ListType):
+            if len(value) == 2:
+                self.addArg(value[0], value[1], append = True)
+            elif len(value) == 1:
+                self.addArg(value[1])
+            else:
+                raise TypeError ("Adding invalid argument to Launcher")
+        else:
+            self.addArg(value)
+
+        return self
+    
     def addArg(self, key, *value, **kwargs):
         append = kwargs.get('append', None)
         if len(value) and append:

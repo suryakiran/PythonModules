@@ -27,7 +27,10 @@ class Launcher:
             raise TypeError("Invalid argument for Launcher")
 
     def __iadd__(self, value):
-        if (type(value) is TupleType) or (type(value) is ListType):
+        if type(value) is ListType:
+            for v in value:
+                self.addArg(v)
+        elif type(value) is TupleType:
             if len(value) == 2:
                 self.addArg(value[0], value[1], append = True)
             elif len(value) == 1:

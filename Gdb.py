@@ -11,7 +11,6 @@ class Gdb:
         self.dry_run = kwargs.get('dry_run')
         emacs_server = kwargs.get('emacs_server', 'Gdb')
         self.init_file = kwargs.get('init_file')
-        self.debug = True
 
         if self.debug:
             if self.useEmacs:

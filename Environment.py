@@ -23,6 +23,9 @@ class Environment:
     def set(self, val):
         self.list = [val]
         self._update()
+        
+    def __str__(self):
+        return ':'.join(self.list)
 
     def unset(self, val):
         self.list = []

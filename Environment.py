@@ -9,13 +9,34 @@ class Environment:
         else:
             self.list = []
 
+    def _path_exists(self, d):
+        if self.list.count(d):
+            return True
+        return False
+        
     def append(self, val):
-        self.list.append(val)
-        self._update()
+        if not self._path_exists(val):
+            self.list.append(val)
+            self._update()
+            
+    def append_dir_of(self, val):
+        if val:
+            d = os.path.dirname(val)
+            if not self._path_exists(d):
+                self.list.append(val)
+                self._update()
 
     def prepend(self, val):
-        self.list.insert(0, val)
-        self._update()
+        if not self._path_exists(val):
+            self.list.insert(0, val)
+            self._update()
+
+    def prepend_dir_of(self, val):
+        if val:
+            d = os.path.dirname(val)
+            if not self._path_exists(d):
+                self.list.insert(0, d)
+                self._update()
 
     def _update(self):
         os.environ[self.key] = os.pathsep.join(self.list)

@@ -11,6 +11,7 @@ class Gdb:
         self.dry_run = kwargs.get('dry_run')
         emacs_server = kwargs.get('emacs_server', 'Gdb')
         self.init_file = kwargs.get('init_file')
+        self.wait = kwargs.get('wait')
 
         if self.debug:
             if self.useEmacs:
@@ -55,7 +56,7 @@ class Gdb:
             elif self.debugger:
                 launcher = self._debug_app(**kwargs)
         else:
-            wait = None
+            wait = self.wait
             launcher = Launcher(self.exe_file, stdout_to_console = True, stderr_to_console = True)
             
         if kwargs is not None:

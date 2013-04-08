@@ -3,6 +3,8 @@ from Locator import Locator
 from Launcher import Launcher
 import commands
 import subprocess
+from os.path import isfile, join
+from os import listdir
 
 class EmacsExpression:
     def __init__(self):
@@ -46,9 +48,17 @@ class Emacs(object):
 
     def _serverRunning(self, server_name):
         server_list = self._serverList()
-        if server_list:
-            return bool (server_list.count(server_name))
-        else:
+        s = [item for item in server_list if os.path.basename(item) == server_name]
+        if not s:
+            return False
+        f = open(s[0], 'r')
+        lines = f.read()
+        f.close()
+        pid = int(lines.split('\n')[0].split()[1])
+        try:
+            os.kill(pid, 0)
+            return True
+        except OSError:
             return False
 
     def _emacsExpr(self):
@@ -61,7 +71,7 @@ class Emacs(object):
 
     def _serverList(self):
         servers_dir = os.path.join(self.homeEnv, '.emacs.d', 'server')
-        files = commands.getoutput("ls -l %s | grep '^-' | awk '{print $NF}'" % servers_dir).split('\n')
+        files = [join(servers_dir, f) for f in listdir(servers_dir) if isfile(join(servers_dir, f))]
         return files
         
     def launch(self, **kwargs):

@@ -85,7 +85,7 @@ class Launcher:
             return
         
         if wait:
-            subprocess.call(self.args)
+            os.execl(self.args[0], *self.args)
         else:
             subprocess.Popen(self.args, stdout = stdout, stderr = stderr)
 

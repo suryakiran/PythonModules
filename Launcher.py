@@ -1,10 +1,10 @@
 import os, sys, re
 import subprocess
-import utils
+import PyCommandUtils
 from Locator import Locator
 from types import *
 
-if not utils.is_posix:
+if not PyCommandUtils.is_posix:
     import win32api
 
 def encapsulate_args_in_quotes(f):
@@ -52,7 +52,7 @@ class Launcher:
 
     def addFiles(self, files):
         for f in files:
-            if utils.is_posix:
+            if PyCommandUtils.is_posix:
                 self.args.append(f)
             else:
                 self.args.append(win32api.GetShortPathName(f))

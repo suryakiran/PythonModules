@@ -1,5 +1,5 @@
 import os, sys
-import utils
+import PyCommandUtils
 
 class SearchInPath:
     def __init__(self, name, *path):
@@ -18,7 +18,7 @@ class SearchInPath:
         raise OSError("Can't find file %s" % self.name)
 
     def find_exe(self):
-        return self.find_if(utils.isExe)
+        return self.find_if(PyCommandUtils.isExe)
 
 if __name__ == '__main__':
     print SearchInPath('emacs').find_exe()

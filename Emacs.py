@@ -71,8 +71,10 @@ class Emacs(object):
 
     def _serverList(self):
         servers_dir = os.path.join(self.homeEnv, '.emacs.d', 'server')
-        files = [join(servers_dir, f) for f in listdir(servers_dir) if isfile(join(servers_dir, f))]
-        return files
+	if os.path.exists(servers_dir):
+		files = [join(servers_dir, f) for f in listdir(servers_dir) if isfile(join(servers_dir, f))]
+		return files
+	return []
         
     def launch(self, **kwargs):
         dry_run = kwargs.get('dry_run')

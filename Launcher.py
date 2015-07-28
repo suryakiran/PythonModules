@@ -62,6 +62,7 @@ class Launcher:
     
     def __call__(self, **kwargs):
         print_args = kwargs.get('print_args')
+        run_in_dir = kwargs.get('dir')
         dry_run = kwargs.get('dry_run')
         if dry_run:
             print_args = True
@@ -87,5 +88,9 @@ class Launcher:
         if wait:
             os.execl(self.args[0], *self.args)
         else:
-            subprocess.Popen(self.args, stdout = stdout, stderr = stderr)
+            if run_in_dir:
+                print run_in_dir
+                subprocess.Popen(self.args, stdout = stdout, stderr = stderr, cwd=run_in_dir)
+            else:
+                subprocess.Popen(self.args, stdout = stdout, stderr = stderr)
 

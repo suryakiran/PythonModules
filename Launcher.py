@@ -86,10 +86,12 @@ class Launcher:
             return
         
         if wait:
+            if run_in_dir:
+                os.chdir(run_in_dir)
+            print os.getcwd()
             os.execl(self.args[0], *self.args)
         else:
             if run_in_dir:
-                print run_in_dir
                 subprocess.Popen(self.args, stdout = stdout, stderr = stderr, cwd=run_in_dir)
             else:
                 subprocess.Popen(self.args, stdout = stdout, stderr = stderr)

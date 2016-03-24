@@ -86,4 +86,8 @@ class Emacs(object):
         if self.emacsExpr:
             self._launcher.addArg('--eval', self.emacsExpr())
 
+        debug = kwargs.get('debug', False)
+        if debug:
+            self._launcher.addArg('--debug-init')
+
         self._launcher(dry_run = dry_run)

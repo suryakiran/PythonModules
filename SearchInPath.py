@@ -21,4 +21,4 @@ class SearchInPath:
         return self.find_if(PyCommandUtils.isExe)
 
 if __name__ == '__main__':
-    print SearchInPath('emacs').find_exe()
+    print (SearchInPath('emacs').find_exe())

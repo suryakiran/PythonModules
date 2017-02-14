@@ -15,10 +15,10 @@ def encapsulate_args_in_quotes(f):
 
 class Launcher:
     def __init__(self, name, **kwargs):
-        self.stderr_to_console = kwargs.get('stderr_to_console', False)
-        self.stdout_to_console = kwargs.get('stdout_to_console', False)
+        self.stderr_to_console = kwargs.get('stderr_to_console', True)
+        self.stdout_to_console = kwargs.get('stdout_to_console', True)
 
-        if type(name) is StringType:
+        if isinstance(name, str):
             l = Locator(name)
             self.args = [l()]
         elif isinstance(name, Locator):
@@ -48,7 +48,8 @@ class Launcher:
             self.args.append(key + '=' + ','.join(map(str, value)))
         else:
             self.args.append(key)
-            map(lambda x: self.args.append(x), value)
+            for x in value:
+                self.args.append(x)
 
     def addFiles(self, files):
         for f in files:
@@ -68,7 +69,7 @@ class Launcher:
             print_args = True
         wait = kwargs.get('wait_for_command_to_complete')
         if print_args:
-            print self.args
+            print (self.args)
         if not self.stderr_to_console:
             stderr = subprocess.PIPE
         else:

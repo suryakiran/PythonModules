@@ -4,6 +4,7 @@ from Launcher import Launcher
 #import commands
 import subprocess
 from os.path import isfile, join
+import PyCommandUtils
 from os import listdir
 
 class EmacsExpression:
@@ -37,9 +38,17 @@ class Emacs(object):
         if line:
             self._gotoLine(line)
 
-        self.exePath = Locator('emacs')
+        if not PyCommandUtils.is_posix:
+            self.exePath = Locator('runemacs')
+        else:
+            self.exePath = Locator('emacs')
+            
         self.exeClientPath = Locator('emacsclient')
-        self.homeEnv = os.environ['HOME']
+        if PyCommandUtils.is_posix:
+            homestr = 'HOME'
+        else:
+            homestr = 'APPDATA'
+        self.homeEnv = os.environ[homestr]
         if self._serverRunning(server_name):
             self._launcher = Launcher(self.exeClientPath)
             self._launcher += ['-n', '-f', server_name]
@@ -58,8 +67,8 @@ class Emacs(object):
         try:
             os.kill(pid, 0)
             return True
-        except OSError:
-            return False
+        except OSError, e:
+            return True
 
     def _emacsExpr(self):
         if not self.emacsExpr:

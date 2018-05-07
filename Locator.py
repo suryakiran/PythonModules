@@ -7,15 +7,16 @@ if not PyCommandUtils.is_posix:
     import win32api as win32
 
 class Locator:
-    def __init__(self, name):
+    def __init__(self, name, **kwargs):
         if not PyCommandUtils.is_posix:
+            self.use_reg = kwargs.get('use_registry', False)
             self.exeName = os.path.basename(name) + '.exe'
         else:
             self.exeName = name
 
     def locate (self, **kwargs):
         exe = None
-        if PyCommandUtils.is_posix:
+        if PyCommandUtils.is_posix or self.use_reg is False:
             try:
                 exe = SearchInPath(self.exeName).find_exe()
             except OSError:
@@ -38,4 +39,7 @@ class Locator:
         return exe
 
     def __call__(self, **kwargs):
-        return self.locate(**kwargs)
+        if PyCommandUtils.is_posix:
+            return self.locate(**kwargs)
+        else:
+            return self.locate(key='SOFTWARE\\%s' % self.exeName, value='path')
